@@ -62,13 +62,11 @@ queueSink q = forever $ do
 	case msg of
 		Nothing	-> return ()
 		Just x	-> liftIO $ do
-			(atomically $ isEmptyTQueue q) >>= putStrLn . ("IRE: " ++) . show
 			atomically $ writeTQueue q x
 
 queueSource :: (MonadIO m, Show a) => TQueue a -> C.Producer m a
 queueSource q = forever $ (liftIO $ do
 	elem <- atomically $ readTQueue q
-	(atomically $ isEmptyTQueue q) >>= putStrLn . ("ITE: " ++) . show
 	return elem
 	) >>= C.yield
 
