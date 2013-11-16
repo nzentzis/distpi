@@ -64,8 +64,7 @@ handleClient sv (hdl, host) = putStrLn ("Connection recieved from " ++ host) >>
 			putStrLn $ printf "Client %s finished workblock (%d-%d)" host start end
 			atomically $ do
 				writeTQueue (completedBlocks sv) r
-				if end > 2000 then return Terminate else
-					liftM SupplyWork (getBlock sv)
+				liftM SupplyWork (getBlock sv)
 			) >>= C.yield
 		performHandshake :: C.Conduit Message IO Message
 		performHandshake = do
